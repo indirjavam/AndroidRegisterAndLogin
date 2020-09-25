@@ -25,7 +25,7 @@ public class SessionManager {
         editor = sharedPreferences.edit();
     }
 
-/*    public void createSession(String name, String email, String id){
+    public void createSession(String name, String email, String id){
 
         editor.putBoolean(LOGIN, true);
         editor.putString(NAME, name);
@@ -33,16 +33,9 @@ public class SessionManager {
         editor.putString(ID, id);
         editor.apply();
 
-    }  */
-
-    public void createSession(String name, String email){
-
-        editor.putBoolean(LOGIN, true);
-        editor.putString(NAME, name);
-        editor.putString(EMAIL, email);
-        editor.apply();
-
     }
+
+
 
     public boolean isLoggin(){
         return sharedPreferences.getBoolean(LOGIN, false);
