@@ -15,6 +15,12 @@
         android:src="@drawable/logo"
         />
 
+<!--    <ImageView
+        android:id="@+id/imaveTV"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/logo"/>-->
+
     <Button
         android:id="@+id/btn_photo"
         style="@style/Widget.AppCompat.ActionButton.CloseMode"
@@ -82,10 +88,21 @@
         android:id="@+id/btn_logout"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginBottom="30dp"
+        android:layout_alignParentEnd="true"
         android:textColor="@android:color/white"
         android:backgroundTint="@color/colorPrimary"
         android:text="Logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_user_details"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_above="@id/btn_logout"
+        android:text="Go to UserDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

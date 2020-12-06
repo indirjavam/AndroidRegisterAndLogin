@@ -4,10 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,12 +48,16 @@ public class HomeActivity extends AppCompatActivity {
     private Button btn_logout, btn_photo_upload;
     SessionManager sessionManager;
     String getId;
-    private static String URL_READ = "http://192.168.43.209/HaerulMuttaqin/android_register_login/read_detail.php";
-    private static String URL_EDIT = "http://192.168.43.209/HaerulMuttaqin/android_register_login/edit_detail.php";
-    private static String URL_UPLOAD = "http://192.168.43.209/HaerulMuttaqin/android_register_login/upload.php";
+//    private static String URL_READ = "http://192.168.1.35/HaerulMuttaqin/android_register_login/read_detail.php";
+    private static String URL_READ = "https://ozkayahalit.com/read_detail.php";
+//    private static String URL_EDIT = "http://192.168.1.35/HaerulMuttaqin/android_register_login/edit_detail.php";
+    private static String URL_EDIT = "https://ozkayahalit.com/edit_detail.php";
+//    private static String URL_UPLOAD = "http://192.168.1.35/HaerulMuttaqin/android_register_login/upload.php";
+    private static String URL_UPLOAD = "https://ozkayahalit.com/upload.php";
     private Menu action;
     private Bitmap bitmap;
     CircleImageView profile_image;
+//    ImageView imageTv;
 
 
     @Override
@@ -65,7 +72,9 @@ public class HomeActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         btn_logout = findViewById(R.id.btn_logout);
         btn_photo_upload = findViewById(R.id.btn_photo);
+        Button userDetails = findViewById(R.id.btn_user_details);
         profile_image = findViewById(R.id.profile_image);
+//        imageTv = findViewById(R.id.imaveTV);
 
         HashMap<String, String> user = sessionManager.getUserDetail();
         getId = user.get(sessionManager.ID);
@@ -85,7 +94,21 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+        userDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, UserDetail.class);
+                intent.putExtra("name",strName);
+                intent.putExtra("image",imageUrl);
+                startActivity(intent);
+
+            }
+        });
     }
+
+    private String strName;
+    private String imageUrl;
 
     //getUserDetail
     private void getUserDetail(){
@@ -112,11 +135,20 @@ public class HomeActivity extends AppCompatActivity {
 
                                     JSONObject object = jsonArray.getJSONObject(i);
 
-                                    String strName = object.getString("name").trim();
+                                    strName = object.getString("name").trim();
                                     String strEmail = object.getString("email").trim();
+
+                                    imageUrl = object.getString("image");
 
                                     name.setText(strName);
                                     email.setText(strEmail);
+
+//                                    Picasso.get().load(imageUrl).fit().centerInside().into(ananin);
+                                    if (TextUtils.isEmpty(imageUrl)) {
+                                        profile_image.setImageDrawable(getResources().getDrawable(R.drawable.logo));
+                                    } else {
+                                        Picasso.get().load(imageUrl).into(profile_image);
+                                    }
 
                                 }
 
@@ -279,7 +311,8 @@ public class HomeActivity extends AppCompatActivity {
             try {
 
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                profile_image.setImageBitmap(bitmap);
+                profile_image.setImageDrawable(null);
+                profile_image.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
 
             } catch (IOException e) {
                 e.printStackTrace();
